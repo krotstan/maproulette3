@@ -34,11 +34,15 @@ export default class ConfirmAction extends Component {
       }
     }
     else {
+      if (this.props.modalActivated) this.props.modalActivated(true)
       this.setState({confirming: true, originalEvent: _cloneDeep(e)})
     }
   }
 
-  cancel = () => this.setState({confirming: false})
+  cancel = () => {
+    if (this.props.modalActivated) this.props.modalActivated(false)
+    this.setState({confirming: false})
+  }
 
   proceed = () => {
     const event = this.state.originalEvent
@@ -91,7 +95,6 @@ export default class ConfirmAction extends Component {
               >
                 <FormattedMessage {...messages.cancel} />
               </button>
-
               <button
                 className="mr-button mr-button--danger"
                 onClick={this.proceed}
@@ -115,7 +118,7 @@ export default class ConfirmAction extends Component {
     return (
       <React.Fragment>
         {ControlWithConfirmation}
-        {this.modal()}
+        {this.state.confirming && this.modal()}
       </React.Fragment>
     )
   }

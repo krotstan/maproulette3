@@ -17,8 +17,12 @@ class Dropdown extends Component {
     this.setState({isVisible: false})
   }
 
+  modalActivated = (isActive) => {
+    this.setState({modalIsActive: isActive})
+  }
+
   handleClickout() {
-    this.closeDropdown()
+    if (!this.state.modalIsActive) this.closeDropdown()
   }
 
   render() {
@@ -28,7 +32,8 @@ class Dropdown extends Component {
     const renderFuncArgs = {
       isDropdownVisible,
       toggleDropdownVisible: this.toggleDropdownVisible,
-      closeDropdown: this.closeDropdown
+      closeDropdown: this.closeDropdown,
+      modalActivated: this.modalActivated,
     }
 
     return (
@@ -47,7 +52,10 @@ class Dropdown extends Component {
                  />
                 }
                 <div className="mr-dropdown__content">
-                  {this.props.dropdownContent(renderFuncArgs)}
+                  {React.cloneElement(
+                    this.props.dropdownContent(renderFuncArgs),
+                    {modalActivated: this.modalActivated})
+                  }
                 </div>
               </div>
             </div>
